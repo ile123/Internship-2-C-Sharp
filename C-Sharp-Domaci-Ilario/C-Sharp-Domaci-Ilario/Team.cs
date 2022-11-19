@@ -6,26 +6,29 @@ using System.Threading.Tasks;
 
 namespace C_Sharp_Domaci_Ilario
 {
-    public class Teams
+    public class Team
     {
         public string Name { get; set; } = string.Empty;
         public int Wins { get; set; }
+        public int Losses { get; set; }
         public int Given_Goals { get; set; }
         public int Taken_Goals { get; set; }
         public Dictionary<string, (string position, int rating)> players { get; set; } = new Dictionary<string, (string position, int rating)>();
-        public Teams()
+        public Team()
         {
             Name = string.Empty;
             Wins = 0;
+            Losses = 0;
             Given_Goals = 0;
             Taken_Goals = 0;
             players = CreateNewDictionaryOfPlayers();
         }
 
-        public Teams(string Nationality)
+        public Team(string Nationality)
         {
             Name = Nationality;
             Wins= 0;
+            Losses=0;
             Given_Goals= 0;
             Taken_Goals= 0;
             switch(Nationality)
@@ -273,7 +276,7 @@ namespace C_Sharp_Domaci_Ilario
         {
             foreach (var pair in this.players)
             {
-                Console.WriteLine($"Key: {pair.Key} --- Value: {pair.Value}\n");
+                Console.WriteLine($"Name: {pair.Key} --- Position: {pair.Value.position} --- Rating: {pair.Value.rating}\n");
             }
         }
     }
