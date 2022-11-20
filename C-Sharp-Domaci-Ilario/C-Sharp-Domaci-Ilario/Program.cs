@@ -981,29 +981,55 @@ void Start()
         switch (input)
         {
             case "1":
-                if(!allMatchesPlayed)
+                Console.WriteLine("\n Zelis li odgrati sve utakmice? \n\n Y - Da N - NE");
+                input = Console.ReadLine();
+                if (input is "Y")
                 {
-                    TrainPlayers(croatianTeam.players);
+                    if (!allMatchesPlayed)
+                    {
+                        TrainPlayers(croatianTeam.players);
+                    }
+                    else
+                    {
+                        Console.WriteLine("\n \n Skupina je zavrsila! \n \n");
+                    }
+                }
+                else if (input is "N")
+                {
+                    Console.WriteLine("\n----Otkaz radnje----\n");
                 }
                 else
                 {
-                    Console.WriteLine("\n \n Skupina je zavrsila! \n \n");
+                    Console.WriteLine("\n----Nedozvoljena vrijednost!----\n");
                 }
                 break;
             case "2":
-                if (!allMatchesPlayed)
+                Console.WriteLine("\n Zelis li odgrati sve utakmice? \n\n Y - Da N - NE");
+                input = Console.ReadLine();
+                if(input is "Y")
                 {
-                    PlayMatch(morrocanTeam, croatianTeam, matchRecords, allTeamsStrikers);
-                    PlayMatch(belgianTeam, canadaianTeam, matchRecords, allTeamsStrikers);
-                    PlayMatch(belgianTeam, morrocanTeam, matchRecords, allTeamsStrikers);
-                    PlayMatch(croatianTeam, canadaianTeam, matchRecords, allTeamsStrikers);
-                    PlayMatch(croatianTeam, belgianTeam, matchRecords, allTeamsStrikers);
-                    PlayMatch(canadaianTeam, morrocanTeam, matchRecords, allTeamsStrikers);
-                    allMatchesPlayed = true;
+                    if (!allMatchesPlayed)
+                    {
+                        PlayMatch(morrocanTeam, croatianTeam, matchRecords, allTeamsStrikers);
+                        PlayMatch(belgianTeam, canadaianTeam, matchRecords, allTeamsStrikers);
+                        PlayMatch(belgianTeam, morrocanTeam, matchRecords, allTeamsStrikers);
+                        PlayMatch(croatianTeam, canadaianTeam, matchRecords, allTeamsStrikers);
+                        PlayMatch(croatianTeam, belgianTeam, matchRecords, allTeamsStrikers);
+                        PlayMatch(canadaianTeam, morrocanTeam, matchRecords, allTeamsStrikers);
+                        allMatchesPlayed = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("\n \n Skupina je zavrsila! \n \n");
+                    }
+                } 
+                else if(input is "N")
+                {
+                    Console.WriteLine("\n----Otkaz radnje----\n");
                 }
                 else
                 {
-                    Console.WriteLine("\n \n Skupina je zavrsila! \n \n");
+                    Console.WriteLine("\n----Nedozvoljena vrijednost!----\n");
                 }
                 break;
             case "3":
@@ -1307,71 +1333,110 @@ void Start()
                     switch(input)
                     {
                         case "1":
-                            Console.WriteLine("\n \n 1 - Belgija \n 2 - Moroko \n 3 - Kanada \n 4 - Hrvatska \n \n");
+                            Console.WriteLine("\n----Zelis li uniti novog igraca? Y -> DA N -> NE ----");
                             input = Console.ReadLine();
-                            switch (input)
+                            if(input is "Y")
                             {
-                                case "1":
-                                    AddPlayerToTeam(belgianTeam.players);
-                                    break;
-                                case "2":
-                                    AddPlayerToTeam(morrocanTeam.players);
-                                    break;
-                                case "3":
-                                    AddPlayerToTeam(canadaianTeam.players);
-                                    break;
-                                case "4":
-                                    AddPlayerToTeam(croatianTeam.players);
-                                    break;
-                                default:
-                                    Console.WriteLine("\n Unia si nedozvoljenu vrijednost! \n");
-                                    break;
+                                Console.WriteLine("\n \n 1 - Belgija \n 2 - Moroko \n 3 - Kanada \n 4 - Hrvatska \n \n");
+                                input = Console.ReadLine();
+                                switch (input)
+                                {
+                                    case "1":
+                                        AddPlayerToTeam(belgianTeam.players);
+                                        break;
+                                    case "2":
+                                        AddPlayerToTeam(morrocanTeam.players);
+                                        break;
+                                    case "3":
+                                        AddPlayerToTeam(canadaianTeam.players);
+                                        break;
+                                    case "4":
+                                        AddPlayerToTeam(croatianTeam.players);
+                                        break;
+                                    default:
+                                        Console.WriteLine("\n Unia si nedozvoljenu vrijednost! \n");
+                                        break;
+                                }
+                            } 
+                            else if(input is "N")
+                            {
+                                Console.WriteLine("\n---- Otkaz Ranje ----\n");
+                            }
+                            else
+                            {
+                                Console.WriteLine("\n---- Nedozvoljena Vrijednost! ----\n");
                             }
                             break;
                         case "2":
-                            Console.WriteLine("\n Unesi ime igraca i u koji klub se nalazi\n");
-                            Console.WriteLine("\n \n 1 - Belgija \n 2 - Moroko \n 3 - Kanada \n 4 - Hrvatska \n \n");
-                            input = Console.ReadLine() ?? "ERROR: Could not save String!";
-                            var playerToDeleteFromTeam = Console.ReadLine() ?? "ERROR: Could not save String!";
-                            switch (input)
+                            Console.WriteLine("\n----Zelis li uniti izbrisat igraca? Y -> DA N -> NE ----");
+                            input = Console.ReadLine();
+                            if(input is "Y")
                             {
-                                case "1":
-                                    DeletePlayerFromTeam(belgianTeam.players, playerToDeleteFromTeam);
-                                    break;
-                                case "2":
-                                    DeletePlayerFromTeam(morrocanTeam.players, playerToDeleteFromTeam);
-                                    break;
-                                case "3":
-                                    DeletePlayerFromTeam(canadaianTeam.players, playerToDeleteFromTeam);
-                                    break;
-                                case "4":
-                                    DeletePlayerFromTeam(croatianTeam.players, playerToDeleteFromTeam);
-                                    break;
-                                default:
-                                    Console.WriteLine("\n Unia si nedozvoljenu vrijednost! \n");
-                                    break;
+                                Console.WriteLine("\n Unesi ime igraca i u koji klub se nalazi\n");
+                                Console.WriteLine("\n \n 1 - Belgija \n 2 - Moroko \n 3 - Kanada \n 4 - Hrvatska \n \n");
+                                input = Console.ReadLine() ?? "ERROR: Could not save String!";
+                                var playerToDeleteFromTeam = Console.ReadLine() ?? "ERROR: Could not save String!";
+                                switch (input)
+                                {
+                                    case "1":
+                                        DeletePlayerFromTeam(belgianTeam.players, playerToDeleteFromTeam);
+                                        break;
+                                    case "2":
+                                        DeletePlayerFromTeam(morrocanTeam.players, playerToDeleteFromTeam);
+                                        break;
+                                    case "3":
+                                        DeletePlayerFromTeam(canadaianTeam.players, playerToDeleteFromTeam);
+                                        break;
+                                    case "4":
+                                        DeletePlayerFromTeam(croatianTeam.players, playerToDeleteFromTeam);
+                                        break;
+                                    default:
+                                        Console.WriteLine("\n Unia si nedozvoljenu vrijednost! \n");
+                                        break;
+                                }
+                            }
+                            else if(input is "N")
+                            {
+                                Console.WriteLine("\n---- Otkaz Ranje ----\n");
+                            }
+                            else
+                            {
+                                Console.WriteLine("\n---- Nedozvoljena Vrijednost! ----\n");
                             }
                             break;
                         case "3":
-                            Console.WriteLine("\n \n 1 - Belgija \n 2 - Moroko \n 3 - Kanada \n 4 - Hrvatska \n \n");
+                            Console.WriteLine("\n----Zelis li uniti prominiti igraca? Y -> DA N -> NE ----");
                             input = Console.ReadLine();
-                            switch (input)
+                            if(input is "Y")
                             {
-                                case "1":
-                                    UpdatePlayerInTeam(belgianTeam.players);
-                                    break;
-                                case "2":
-                                    UpdatePlayerInTeam(morrocanTeam.players);
-                                    break;
-                                case "3":
-                                    UpdatePlayerInTeam(canadaianTeam.players);
-                                    break;
-                                case "4":
-                                    UpdatePlayerInTeam(croatianTeam.players);
-                                    break;
-                                default:
-                                    Console.WriteLine("\n Unia si nedozvoljenu vrijednost! \n");
-                                    break;
+                                Console.WriteLine("\n \n 1 - Belgija \n 2 - Moroko \n 3 - Kanada \n 4 - Hrvatska \n \n");
+                                input = Console.ReadLine();
+                                switch (input)
+                                {
+                                    case "1":
+                                        UpdatePlayerInTeam(belgianTeam.players);
+                                        break;
+                                    case "2":
+                                        UpdatePlayerInTeam(morrocanTeam.players);
+                                        break;
+                                    case "3":
+                                        UpdatePlayerInTeam(canadaianTeam.players);
+                                        break;
+                                    case "4":
+                                        UpdatePlayerInTeam(croatianTeam.players);
+                                        break;
+                                    default:
+                                        Console.WriteLine("\n Unia si nedozvoljenu vrijednost! \n");
+                                        break;
+                                }
+                            }
+                            else if(input is "N")
+                            {
+                                Console.WriteLine("\n---- Otkaz Ranje ----\n");
+                            }
+                            else
+                            {
+                                Console.WriteLine("\n---- Nedozvoljena Vrijednost! ----\n");
                             }
                             break;
                         case "0":
