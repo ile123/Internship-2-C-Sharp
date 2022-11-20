@@ -4,6 +4,7 @@
 using C_Sharp_Domaci_Ilario;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Security.Cryptography;
 
 double GetRandomDouble()
@@ -702,6 +703,20 @@ void PlayMatch(Team firstTeam, Team secondTeam, List<(string Winner, string Loos
                 }
             }
         }
+        foreach(var item in strikersFirstTeam)
+        {
+            if (!strikers.ContainsKey(item.Key))
+            {
+                strikers.Add(item.Key, (item.Value.Club, item.Value.Goals));
+            }
+        }
+        foreach (var item in strikersSecondTeam)
+        {
+            if (!strikers.ContainsKey(item.Key))
+            {
+                strikers.Add(item.Key, (item.Value.Club, item.Value.Goals));
+            }
+        }
         var newRating = 0;
         foreach(var item in firstTeam.players)
         {
@@ -919,6 +934,20 @@ void PlayMatch(Team firstTeam, Team secondTeam, List<(string Winner, string Loos
                     tempStrikerGoals = item.Value.Goals + item2.Value.Goals;
                     strikers[item.Key] = (item.Value.Club, tempStrikerGoals);
                 }
+            }
+        }
+        foreach (var item in strikersFirstTeam)
+        {
+            if (!strikers.ContainsKey(item.Key))
+            {
+                strikers.Add(item.Key, (item.Value.Club, item.Value.Goals));
+            }
+        }
+        foreach (var item in strikersSecondTeam)
+        {
+            if (!strikers.ContainsKey(item.Key))
+            {
+                strikers.Add(item.Key, (item.Value.Club, item.Value.Goals));
             }
         }
         var newRating = 0;
