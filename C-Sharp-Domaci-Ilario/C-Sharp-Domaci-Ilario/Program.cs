@@ -183,6 +183,286 @@ void PrintAllShooters(Dictionary<string, (string Club, int Goals)> shooters)
     }
 }
 
+void PrintGroupTable(List<Team> teams)
+{
+    var tempTable = new List<(string Team, int score, double goalDifference)>();
+    foreach(var team in teams)
+    {
+        var score = team.Given_Goals + team.Wins * 3;
+        var goalDifference = (double) team.Given_Goals / team.Taken_Goals;
+        tempTable.Add((team.Name, score, goalDifference));
+    }
+    Console.WriteLine("\n \n Pozicija \t\t Ekipa \t\t Bodovi \t\t Goal Razlika\n\n\n");
+    var teamsTable = (
+        from team in tempTable
+        orderby team.score descending
+        select team
+        ).ToList();
+    for(var i = 0; i< teamsTable.Count; i++)
+    {
+        Console.WriteLine($"    {i + 1}# \t\t     {teamsTable[i].Team} \t\t    {teamsTable[i].score} \t\t\t    {teamsTable[i].goalDifference} \n \n");
+    }
+}
+
+void AddPlayerToTeam(Dictionary<string, (string position, int rating)> players)
+{
+    if(players.Count == 26)
+    {
+        Console.WriteLine("Previse Igraca u Ekipi!\n");
+        return;
+    }
+    Console.WriteLine("-----------------------------------Sada cemo uniti igraca!-----------------------------------\n");
+    var tempName = "";
+    var tempPosition = "";
+    var tempRating = "";
+    var rating = 0;
+    Console.WriteLine("-----------------------------------Unesi ime Igraca!-----------------------------------\n");
+    tempName = Console.ReadLine() ?? "Error: Player name could not be assigned!";
+    if (players.ContainsKey(tempName))
+    {
+        while (true)
+        {
+            Console.WriteLine("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" +
+                "\n Unia si igraca koji postoji vec! Unesi opet! \n" +
+                "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+            tempName = Console.ReadLine() ?? "Error: Player name could not be assigned!";
+            if (players.ContainsKey(tempName))
+            {
+                continue;
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+    Console.WriteLine("-----------------------------------Unesi ime Poziciju!-----------------------------------\n");
+    tempPosition = Console.ReadLine();
+    if (tempPosition is not "GK" && tempPosition is not "DF" && tempPosition is not "MF" && tempPosition is not "FW")
+    {
+        while (true)
+        {
+            Console.WriteLine("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" +
+                "\n Krivi format! Unesi opet(GK - golman, DF - obrana, MF - sredina, FW - napadac): \n" +
+                "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n ");
+            tempPosition = Console.ReadLine();
+            if (tempPosition is not "GK" && tempPosition is not "DF" && tempPosition is not "MF" && tempPosition is not "FW")
+            {
+                continue;
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+    Console.WriteLine("-----------------------------------Unesi ime Rating!-----------------------------------\n");
+    tempRating = Console.ReadLine();
+    if (int.TryParse(tempRating, out rating))
+    {
+        if (rating >= 0 && rating <= 100)
+        {
+            players.Add(tempName, (tempPosition, rating));
+        }
+        else
+        {
+            while (true)
+            {
+                Console.WriteLine("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" +
+                    "\n Ili nisi upisa broj ili si upisa preko dozvoljene granice!(0 - 100) \n" +
+                    "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n ");
+                tempRating = Console.ReadLine();
+                if (int.TryParse(tempRating, out rating))
+                {
+                    if (rating >= 0 && rating <= 100)
+                    {
+                        players.Add(tempName, (tempPosition, rating));
+                        break;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+                else
+                {
+                    continue;
+                }
+            }
+        }
+    }
+    else
+    {
+        while (true)
+        {
+            Console.WriteLine("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" +
+                "\n Ili nisi upisa broj ili si upisa preko dozvoljene granice!(0 - 100) \n" +
+                "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n ");
+            tempRating = Console.ReadLine();
+            if (int.TryParse(tempRating, out rating))
+            {
+                if (rating >= 0 && rating <= 100)
+                {
+                    players.Add(tempName, (tempPosition, rating));
+                    break;
+                }
+                else
+                {
+                    continue;
+                }
+            }
+            else
+            {
+                continue;
+            }
+        }
+    }
+}
+
+void DeletePlayerFromTeam(Dictionary<string, (string position, int rating)> players, string Player)
+{
+    if (!players.ContainsKey(Player))
+    {
+        Console.WriteLine("\n IGRAC NE POSTOJI!\n");
+        return;
+    }
+    players.Remove(Player);
+}
+
+void UpdatePlayerInTeam(Dictionary<string, (string position, int rating)> players)
+{
+    Console.WriteLine("-----------------------------------Sada cemo uniti igraca!-----------------------------------\n");
+    var tempName = "";
+    var tempPosition = "";
+    var tempRating = "";
+    var oldName = "";
+    var rating = 0;
+    Console.WriteLine("-----------------------------------Unesi ime Igraca!-----------------------------------\n");
+    tempName = Console.ReadLine() ?? "Error: Player name could not be assigned!";
+    if (players.ContainsKey(tempName))
+    {
+        while (true)
+        {
+            Console.WriteLine("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" +
+                "\n Unia si igraca koji postoji vec! Unesi opet! \n" +
+                "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+            tempName = Console.ReadLine() ?? "Error: Player name could not be assigned!";
+            if (players.ContainsKey(tempName))
+            {
+                continue;
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+    Console.WriteLine("-----------------------------------Unesi ime Poziciju!-----------------------------------\n");
+    tempPosition = Console.ReadLine();
+    if (tempPosition is not "GK" && tempPosition is not "DF" && tempPosition is not "MF" && tempPosition is not "FW")
+    {
+        while (true)
+        {
+            Console.WriteLine("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" +
+                "\n Krivi format! Unesi opet(GK - golman, DF - obrana, MF - sredina, FW - napadac): \n" +
+                "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n ");
+            tempPosition = Console.ReadLine();
+            if (tempPosition is not "GK" && tempPosition is not "DF" && tempPosition is not "MF" && tempPosition is not "FW")
+            {
+                continue;
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+    Console.WriteLine("-----------------------------------Unesi ime Rating!-----------------------------------\n");
+    tempRating = Console.ReadLine();
+    if (int.TryParse(tempRating, out rating))
+    {
+        if (rating >= 0 && rating <= 100)
+        {
+            Console.WriteLine("\n ----------------------------------------------- Unesi Ime Igraca Kojeg Zelis Prominit! ----------------------------------------\n");
+            oldName = Console.ReadLine() ?? "ERORR: Could not assign string";
+            if (players.ContainsKey(oldName))
+            {
+                DeletePlayerFromTeam(players, oldName);
+                players.Add(tempName, (tempPosition, rating));
+            }
+            else
+            {
+                Console.WriteLine("\n Igrac Nepostoji!\n");
+            }
+        }
+        else
+        {
+            while (true)
+            {
+                Console.WriteLine("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" +
+                    "\n Ili nisi upisa broj ili si upisa preko dozvoljene granice!(0 - 100) \n" +
+                    "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n ");
+                tempRating = Console.ReadLine();
+                if (int.TryParse(tempRating, out rating))
+                {
+                    if (rating >= 0 && rating <= 100)
+                    {
+                        Console.WriteLine("\n --------------------------------------------------------------- Unesi Ime Igraca ! -------------------------------------------------\n");
+                        oldName = Console.ReadLine() ?? "ERORR: Could not assign string";
+                        if (players.ContainsKey(oldName))
+                        {
+                            DeletePlayerFromTeam(players, oldName);
+                            players.Add(tempName, (tempPosition, rating));
+                        }
+                        else
+                        {
+                            Console.WriteLine("\n Igrac Nepostoji!\n");
+                        }
+                        break;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+                else
+                {
+                    continue;
+                }
+            }
+        }
+    }
+    else
+    {
+        while (true)
+        {
+            Console.WriteLine("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" +
+                "\n Ili nisi upisa broj ili si upisa preko dozvoljene granice!(0 - 100) \n" +
+                "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n ");
+            tempRating = Console.ReadLine();
+            if (rating >= 0 && rating <= 100)
+            {
+                Console.WriteLine("\n ------------------------------------------------ Unesi Ime Igraca Kojeg Zelis Prominit! -----------------------------------\n");
+                oldName = Console.ReadLine() ?? "ERORR: Could not assign string";
+                if (players.ContainsKey(oldName))
+                {
+                    DeletePlayerFromTeam(players, oldName);
+                    players.Add(tempName, (tempPosition, rating));
+                }
+                else
+                {
+                    Console.WriteLine("\n Igrac Nepostoji!\n");
+                }
+                break;
+            }
+            else
+            {
+                continue;
+            }
+        }
+    }
+}
+
 List<(string Name, string Position)> ReturnSortedListOfCertainPosition(Dictionary<string, (string position, int rating)> players, string Position)
 {
     var sortedDictionary = (
@@ -730,14 +1010,14 @@ void Start()
                 while (true)
                 {
                     PrintMenuStatistics();
-                    var statInput = Console.ReadLine();
+                    input = Console.ReadLine();
                     var statisticFlag = false;
-                    switch(statInput)
+                    switch (input)
                     {
                         case "1":
                             Console.WriteLine("\n \n 1 - Belgija \n 2 - Moroko \n 3 - Kanada \n 4 - Hrvatska \n \n");
-                            var nationality = Console.ReadLine();
-                            switch (nationality)
+                            input = Console.ReadLine();
+                            switch (input)
                             {
                                 case "1":
                                     PrintAllPlayers(belgianTeam.players);
@@ -758,8 +1038,8 @@ void Start()
                             break;
                         case "2":
                             Console.WriteLine("\n \n 1 - Belgija \n 2 - Moroko \n 3 - Kanada \n 4 - Hrvatska \n \n");
-                            var nationalityRatingAscnding = Console.ReadLine();
-                            switch (nationalityRatingAscnding)
+                            input = Console.ReadLine();
+                            switch (input)
                             {
                                 case "1":
                                     PrintAllPlayersByRatingAsceding(belgianTeam.players);
@@ -780,8 +1060,8 @@ void Start()
                             break;
                         case "3":
                             Console.WriteLine("\n \n 1 - Belgija \n 2 - Moroko \n 3 - Kanada \n 4 - Hrvatska \n \n");
-                            var nationalityRatingDescending = Console.ReadLine();
-                            switch (nationalityRatingDescending)
+                            input = Console.ReadLine();
+                            switch (input)
                             {
                                 case "1":
                                     PrintAllPlayersByRatingDescending(belgianTeam.players);
@@ -802,8 +1082,8 @@ void Start()
                             break;
                         case "4":
                             Console.WriteLine("\n \n 1 - Belgija \n 2 - Moroko \n 3 - Kanada \n 4 - Hrvatska \n \n");
-                            var nationalityName = Console.ReadLine();
-                            switch (nationalityName)
+                            input = Console.ReadLine();
+                            switch (input)
                             {
                                 case "1":
                                     PrintAllPlayersByName(belgianTeam.players);
@@ -824,8 +1104,8 @@ void Start()
                             break;
                         case "5":
                             Console.WriteLine("\n \n 1 - Belgija \n 2 - Moroko \n 3 - Kanada \n 4 - Hrvatska \n \n");
-                            var nationalityRating = Console.ReadLine();
-                            switch (nationalityRating)
+                            input = Console.ReadLine();
+                            switch (input)
                             {
                                 case "1":
                                     PrintAllPlayersByRating(belgianTeam.players);
@@ -846,13 +1126,13 @@ void Start()
                             break;
                         case "6":
                             Console.WriteLine("\n \n 1 - Belgija \n 2 - Moroko \n 3 - Kanada \n 4 - Hrvatska \n \n");
-                            var nationalityPosition = Console.ReadLine();
-                            switch (nationalityPosition)
+                            input = Console.ReadLine();
+                            switch (input)
                             {
                                 case "1":
                                     Console.WriteLine("\n \n 1 - GK \n 2 - DF \n 3 - MF \n 4 - FW \n \n");
-                                    var positionBelgian = Console.ReadLine();
-                                    switch (positionBelgian)
+                                    input = Console.ReadLine();
+                                    switch (input)
                                     {
                                         case "1":
                                             PrintAllPlayersByPosition(belgianTeam.players, "GK");
@@ -873,8 +1153,8 @@ void Start()
                                     break;
                                 case "2":
                                     Console.WriteLine("\n \n 1 - GK \n 2 - DF \n 3 - MF \n 4 - FW \n \n");
-                                    var positionMorrocan = Console.ReadLine();
-                                    switch (positionMorrocan)
+                                    input = Console.ReadLine();
+                                    switch (input)
                                     {
                                         case "1":
                                             PrintAllPlayersByPosition(belgianTeam.players, "GK");
@@ -895,8 +1175,8 @@ void Start()
                                     break;
                                 case "3":
                                     Console.WriteLine("\n \n 1 - GK \n 2 - DF \n 3 - MF \n 4 - FW \n \n");
-                                    var positionCanadian = Console.ReadLine();
-                                    switch (positionCanadian)
+                                    input = Console.ReadLine();
+                                    switch (input)
                                     {
                                         case "1":
                                             PrintAllPlayersByPosition(belgianTeam.players, "GK");
@@ -917,8 +1197,8 @@ void Start()
                                     break;
                                 case "4":
                                     Console.WriteLine("\n \n 1 - GK \n 2 - DF \n 3 - MF \n 4 - FW \n \n");
-                                    var positionCroatian = Console.ReadLine();
-                                    switch (positionCroatian)
+                                    input = Console.ReadLine();
+                                    switch (input)
                                     {
                                         case "1":
                                             PrintAllPlayersByPosition(belgianTeam.players, "GK");
@@ -944,8 +1224,8 @@ void Start()
                             break;
                         case "7":
                             Console.WriteLine("\n \n 1 - Belgija \n 2 - Moroko \n 3 - Kanada \n 4 - Hrvatska \n \n");
-                            var nationalityEleven = Console.ReadLine();
-                            switch (nationalityEleven)
+                            input = Console.ReadLine();
+                            switch (input)
                             {
                                 case "1":
                                     PrintFirstElevenPlayers(belgianTeam.players);
@@ -969,8 +1249,8 @@ void Start()
                             break;
                         case "9":
                             Console.WriteLine("\n \n 1 - Belgija \n 2 - Moroko \n 3 - Kanada \n 4 - Hrvatska \n \n");
-                            var countryScore = Console.ReadLine();
-                            switch (countryScore)
+                            input = Console.ReadLine();
+                            switch (input)
                             {
                                 case "1":
                                     Console.WriteLine($"Belgija -> pobjeda: {belgianTeam.Wins} --- gubitaka: {belgianTeam.Losses}\n");
@@ -996,7 +1276,14 @@ void Start()
                                 $"Hrvatska -> pobijeda: {croatianTeam.Wins} --- gubitci: {croatianTeam.Losses} \n");
                             break;
                         case "11":
-                            //Dovrsi sutra
+                            var teamList = new List<Team> 
+                            {
+                                croatianTeam,
+                                morrocanTeam,
+                                canadaianTeam,
+                                belgianTeam
+                            };
+                            PrintGroupTable(teamList);
                             break;
                         case "0":
                             statisticFlag = true;
@@ -1015,15 +1302,77 @@ void Start()
                 while (true)
                 {
                     PrintMenuPlayerControl();
-                    var contInput = Console.ReadLine();
+                    input = Console.ReadLine();
                     var controlFlag = false;
-                    switch(contInput)
+                    switch(input)
                     {
                         case "1":
+                            Console.WriteLine("\n \n 1 - Belgija \n 2 - Moroko \n 3 - Kanada \n 4 - Hrvatska \n \n");
+                            input = Console.ReadLine();
+                            switch (input)
+                            {
+                                case "1":
+                                    AddPlayerToTeam(belgianTeam.players);
+                                    break;
+                                case "2":
+                                    AddPlayerToTeam(morrocanTeam.players);
+                                    break;
+                                case "3":
+                                    AddPlayerToTeam(canadaianTeam.players);
+                                    break;
+                                case "4":
+                                    AddPlayerToTeam(croatianTeam.players);
+                                    break;
+                                default:
+                                    Console.WriteLine("\n Unia si nedozvoljenu vrijednost! \n");
+                                    break;
+                            }
                             break;
                         case "2":
+                            Console.WriteLine("\n Unesi ime igraca i u koji klub se nalazi\n");
+                            Console.WriteLine("\n \n 1 - Belgija \n 2 - Moroko \n 3 - Kanada \n 4 - Hrvatska \n \n");
+                            input = Console.ReadLine() ?? "ERROR: Could not save String!";
+                            var playerToDeleteFromTeam = Console.ReadLine() ?? "ERROR: Could not save String!";
+                            switch (input)
+                            {
+                                case "1":
+                                    DeletePlayerFromTeam(belgianTeam.players, playerToDeleteFromTeam);
+                                    break;
+                                case "2":
+                                    DeletePlayerFromTeam(morrocanTeam.players, playerToDeleteFromTeam);
+                                    break;
+                                case "3":
+                                    DeletePlayerFromTeam(canadaianTeam.players, playerToDeleteFromTeam);
+                                    break;
+                                case "4":
+                                    DeletePlayerFromTeam(croatianTeam.players, playerToDeleteFromTeam);
+                                    break;
+                                default:
+                                    Console.WriteLine("\n Unia si nedozvoljenu vrijednost! \n");
+                                    break;
+                            }
                             break;
                         case "3":
+                            Console.WriteLine("\n \n 1 - Belgija \n 2 - Moroko \n 3 - Kanada \n 4 - Hrvatska \n \n");
+                            input = Console.ReadLine();
+                            switch (input)
+                            {
+                                case "1":
+                                    UpdatePlayerInTeam(belgianTeam.players);
+                                    break;
+                                case "2":
+                                    UpdatePlayerInTeam(morrocanTeam.players);
+                                    break;
+                                case "3":
+                                    UpdatePlayerInTeam(canadaianTeam.players);
+                                    break;
+                                case "4":
+                                    UpdatePlayerInTeam(croatianTeam.players);
+                                    break;
+                                default:
+                                    Console.WriteLine("\n Unia si nedozvoljenu vrijednost! \n");
+                                    break;
+                            }
                             break;
                         case "0":
                             controlFlag = true;
